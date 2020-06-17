@@ -8,7 +8,7 @@ object Hello extends Misc with App {
 
   val res = lines.drop(1)
   .map(getValues(_))
-  .reduce((a, b) => calc(a, b))
+  .fold((0,0,0,0))((a, b) => calc(a, b))
 
   println("Critical Reading Mean %f, Mathematics Mean %f, Writing Mean %f".format(
     res._2/res._1.toFloat, res._3/res._1.toFloat, res._4/res._1.toFloat))
@@ -20,6 +20,10 @@ trait Misc {
       val lines = (for (line <- bufferedSource.getLines()) yield line).toList
       bufferedSource.close
       lines
+  }
+  def hasValues(line:String): Boolean = {
+    val values = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)")
+    values.length > 2
   }
 
   def getValues(line:String): (Int, Int, Int, Int) = {
